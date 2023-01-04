@@ -1,0 +1,8 @@
+// Override default variables before the import
+.form-signup {
+    max-width: 380px;
+    padding: 15px;
+}
+
+// Import Bootstrap and its default variables
+@import '~bootstrap/scss/bootstrap.scss';
