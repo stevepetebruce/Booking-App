@@ -1,16 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // Toast notifications
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import TopNav from "./components/TopNav";
 import Home from "./pages/booking/Home";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
-
-// Redux
-import { Provider } from "react-redux";
 
 function App() {
 	return (

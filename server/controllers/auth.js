@@ -1,3 +1,5 @@
+import jwt from "jsonwebtoken";
+
 import User from "../models/user.js";
 
 export const register = async (req, res) => {
@@ -38,5 +40,46 @@ export const register = async (req, res) => {
 	} catch (err) {
 		console.log("CREATE USER FAILED", err);
 		return res.status(400).send("Error. Try again.");
+	}
+};
+
+export const login = async (req, res) => {
+	const { email, password } = req.body;
+
+	try {
+		// check if user with that email exists
+		let user = await User.findOne({
+			email: email.toLowerCase(),
+		}).exec();
+
+		if (!user)
+			return res.status(400).send("User with that email not found");
+
+		// compare password
+		user.comparePassword(password, (err, match) => {
+			console.log("COMPARE PASSWORD IN LOGIN ERR", err);
+			if (!match || err) return res.status(400).send("Wrong password");
+
+			// generate token and send to client
+			let token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+				expiresIn: "7d",
+			});
+
+			res.json({
+				token,
+				user: {
+					_id: user._id,
+					firstName: user.firstName,
+					lastName: user.lastName,
+					email: user.email,
+					role: user.role,
+					// stripe_account_id: user.stripe_account_id,
+					// stripe_seller: user.stripe_seller,
+				},
+			});
+		});
+	} catch (err) {
+		console.log(err);
+		return res.status(400).send("Login failed. Try again.");
 	}
 };

@@ -2,8 +2,8 @@ import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-// axios
-import axios from "axios";
+// Get/Post request actions
+import { register } from "../../actions/auth";
 
 import RegisterForm from "../../components/auth/register/RegisterForm";
 
@@ -33,15 +33,12 @@ function Register() {
 
 		// Register user
 		try {
-			const response = await axios.post(
-				"http://localhost:8000/api/users/register",
-				{
-					email: emailRef.current.value,
-					firstName: firstNameRef.current.value,
-					lastName: lastNameRef.current.value,
-					password: passwordRef.current.value,
-				}
-			);
+			const response = register({
+				email: emailRef.current.value,
+				firstName: firstNameRef.current.value,
+				lastName: lastNameRef.current.value,
+				password: passwordRef.current.value,
+			});
 			console.log(response);
 			toast("Registered successfully!");
 		} catch (err) {
