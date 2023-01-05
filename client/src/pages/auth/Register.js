@@ -1,4 +1,6 @@
-import { useRef, history } from "react";
+import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 // axios
 import axios from "axios";
@@ -6,22 +8,26 @@ import axios from "axios";
 import RegisterForm from "../../components/auth/register/RegisterForm";
 
 function Register() {
+	const navigate = useNavigate();
+
 	const emailRef = useRef("");
 	const firstNameRef = useRef("");
 	const lastNameRef = useRef("");
 	const passwordRef = useRef("");
 	const password2Ref = useRef("");
 
-	// check passwords match
-	const passwordsMatch =
-		passwordRef.current.value === password2Ref.current.value ? true : false;
-
 	// Handle register form submit
 	const handleRegister = async (e) => {
 		e.preventDefault();
+		// check passwords match
+		const passwordsMatch =
+			passwordRef.current.value === password2Ref.current.value
+				? true
+				: false;
 
-		if (!passwordsMatch) {
-			console.log("Passwords do not match");
+		if (passwordsMatch === false) {
+			console.log(passwordsMatch, "Passwords do not match");
+			toast("Passwords do not match");
 			return;
 		}
 
@@ -37,8 +43,13 @@ function Register() {
 				}
 			);
 			console.log(response);
+			toast("Registered successfully!");
 		} catch (err) {
 			console.log(err);
+			if (err.response.status === 400) {
+				toast(err.response.data);
+				return;
+			}
 		}
 
 		// Clear form
@@ -49,7 +60,7 @@ function Register() {
 		password2Ref.current.value = "";
 
 		// Redirect to login
-		history.push("/login");
+		navigate("/login");
 
 		// Show success message
 		console.log("User registered");

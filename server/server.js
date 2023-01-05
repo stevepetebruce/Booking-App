@@ -12,6 +12,7 @@ const app = express();
 // middlewear
 app.use(cors());
 app.use(morgan("dev"));
+app.use(express.json());
 
 // connect to db
 mongoose

@@ -1,4 +1,8 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+// Toast notifications
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import TopNav from "./components/TopNav";
 import Home from "./pages/booking/Home";
@@ -12,6 +16,7 @@ function App() {
 	return (
 		<BrowserRouter>
 			<TopNav />
+			<ToastContainer position="bottom-right" />
 			<Routes>
 				<Route path="/" element={<Home />} />
 				<Route path="login/*" element={<Login />} />
