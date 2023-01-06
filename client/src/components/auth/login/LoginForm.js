@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 const LoginForm = ({ handleLogin, formRefs: { emailRef, passwordRef } }) => {
 	// Disable submit button if email or password is empty

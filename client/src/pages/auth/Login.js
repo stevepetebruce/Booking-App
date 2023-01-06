@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
 
 // Get/Post request actions
 import { login } from "../../actions/auth";
@@ -9,6 +10,8 @@ import LoginForm from "../../components/auth/login/LoginForm";
 
 function Login() {
 	const navigate = useNavigate();
+
+	const dispatch = useDispatch();
 
 	const emailRef = useRef("");
 	const passwordRef = useRef("");
@@ -21,19 +24,19 @@ function Login() {
 				email: emailRef.current.value,
 				password: passwordRef.current.value,
 			});
-			console.log(response);
+
 			if (response.data) {
 				// Save user and token to local storage
 				window.localStorage.setItem(
 					"auth",
-					JSON.stringify(response.data.token)
+					JSON.stringify(response.data)
 				);
 
 				// Save user and token to redux store
-				// dispatch({
-				// 	type: "LOGIN",
-				// 	payload: response.data.token,
-				// });
+				dispatch({
+					type: "LOGGED_IN_USER",
+					payload: response.data,
+				});
 			}
 			toast("Logged in successfully!");
 		} catch (err) {
