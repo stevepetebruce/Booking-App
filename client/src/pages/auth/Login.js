@@ -52,7 +52,7 @@ function Login() {
 		passwordRef.current.value = "";
 
 		// Redirect to home
-		navigate("/");
+		navigate("/dashboard");
 	};
 
 	return (
