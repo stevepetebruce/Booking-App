@@ -11,6 +11,8 @@ import Home from "./pages/booking/Home";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Dashboard from "./pages/user/Dashboard";
+import DashboardSeller from "./pages/user/DashboardSeller";
+import NewVenue from "./pages/venues/NewVenue";
 
 function App() {
 	return (
@@ -22,7 +24,12 @@ function App() {
 				<Route path="login/*" element={<Login />} />
 				<Route path="register/*" element={<Register />} />
 				<Route element={<ProtectedRoutes />}>
-					<Route path="dashboard/*" element={<Dashboard />} />
+					<Route path="dashboard/" element={<Dashboard />} />
+					<Route
+						path="dashboard/seller"
+						element={<DashboardSeller />}
+					/>
+					<Route path="venues/new" element={<NewVenue />} />
 				</Route>
 			</Routes>
 		</BrowserRouter>

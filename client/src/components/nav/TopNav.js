@@ -35,6 +35,13 @@ const TopNav = () => {
 							Home
 						</Link>
 					</li>
+					{auth.user && auth.token && (
+						<li>
+							<Link to="/dashboard" className="nav-link">
+								Dashboard
+							</Link>
+						</li>
+					)}
 				</ul>
 
 				{!auth.user && !auth.token ? (
