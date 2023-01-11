@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router();
 
 // Middleware
-import { requireSignin } from "../middleware";
+import { requireSignin } from "../middleware/index.js";
 
 // Controllers
 import { registerConnectAccount } from "../controllers/stripe.js";

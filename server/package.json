@@ -21,6 +21,7 @@
     "mongoose": "^6.8.2",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.20",
+    "query-string": "^8.1.0",
     "stripe": "^11.6.0"
   }
 }
