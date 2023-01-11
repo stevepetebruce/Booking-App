@@ -8,10 +8,13 @@ import { requireSignin } from "../middleware/index.js";
 import {
 	registerConnectAccount,
 	getAccountStatus,
+	getAccountBalance,
 } from "../controllers/stripe.js";
 
 router.post("/connect-register", requireSignin, registerConnectAccount);
 
 router.post("/get-account-status", requireSignin, getAccountStatus);
+
+router.post("/get-account-balance", requireSignin, getAccountBalance);
 
 module.exports = router;

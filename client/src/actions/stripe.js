@@ -23,3 +23,15 @@ export const getAccountStatus = async (token) => {
 		}
 	);
 };
+
+export const getAccountBalance = async (token) => {
+	return await axios.post(
+		`${process.env.REACT_APP_API}/get-account-balance`,
+		{},
+		{
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		}
+	);
+};
