@@ -23,14 +23,16 @@ const ConnectNav = () => {
 					description={user.firstName}
 				/>
 			</Card>
-			{auth.token &&
-				auth.user.stripe_seller &&
-				auth.user.stripe_seller.charges_enabled && (
-					<>
+			{auth.token && auth.user.stripe_seller?.charges_enabled && (
+				<>
+					<Card>
 						<div>Pending balance</div>
+					</Card>
+					<Card>
 						<div>Payout Settings</div>
-					</>
-				)}
+					</Card>
+				</>
+			)}
 		</section>
 	);
 };

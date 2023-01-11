@@ -13,6 +13,7 @@ import Register from "./pages/auth/Register";
 import Dashboard from "./pages/user/Dashboard";
 import DashboardSeller from "./pages/user/DashboardSeller";
 import NewVenue from "./pages/venues/NewVenue";
+import StripeCallback from "./pages/stripe/StripeCallback";
 
 function App() {
 	return (
@@ -30,6 +31,10 @@ function App() {
 						element={<DashboardSeller />}
 					/>
 					<Route path="venues/new" element={<NewVenue />} />
+					<Route
+						path="stripe/callback"
+						element={<StripeCallback />}
+					/>
 				</Route>
 			</Routes>
 		</BrowserRouter>

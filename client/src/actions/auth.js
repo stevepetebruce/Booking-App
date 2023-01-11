@@ -10,3 +10,13 @@ export const register = async (user) => {
 export const login = async (user) => {
 	return await axios.post(`${process.env.REACT_APP_API}/users/login`, user);
 };
+
+// Update user in localstorage
+export const updateUserInLocalStorage = (user, next) => {
+	if (window.localStorage.getItem("auth")) {
+		let auth = JSON.parse(localStorage.getItem("auth"));
+		auth.user = user;
+		localStorage.setItem("auth", JSON.stringify(auth));
+		next();
+	}
+};

@@ -25,6 +25,8 @@ const DashboardSeller = () => {
 			const res = await registerConnectAccount(auth.token);
 			console.log("REGISTER CONNECT ACCOUNT RES", res);
 			setLoading(false);
+			// redirect to stripe onboarding page when link is received from backend
+			window.location.href = res.data;
 		} catch (err) {
 			console.log("REGISTER CONNECT ACCOUNT ERR", err);
 			toast.error("Stripe onboarding failed. Try again.");
@@ -46,7 +48,7 @@ const DashboardSeller = () => {
 								disabled={loading}
 								to="/venues/new"
 								className="btn btn-primary ">
-								{!loading ? (
+								{loading ? (
 									<div
 										className="spinner-border spinner-border-sm text-light"
 										role="status">

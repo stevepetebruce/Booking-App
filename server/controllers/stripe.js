@@ -5,6 +5,7 @@ const queryString = require("querystring");
 
 const stripe = Stripe(process.env.STRIPE_SECRET);
 
+// Rgister a new connect account
 export const registerConnectAccount = async (req, res) => {
 	console.log(req.auth);
 	// find user from db
@@ -36,23 +37,45 @@ export const registerConnectAccount = async (req, res) => {
 	// construct the link (frontend will use this to complete onboarding)
 	let link = `${accountLink.url}?${queryString.stringify(accountLink)}`;
 	console.log("LOGIN LINK", link);
+
 	res.send(link);
+};
 
-	// update payment schedule (optional)
-	// - default is "automatic" (payouts every 2 days)
-	// - "manual" is instant payout (no charge)
-	// - "daily" is daily payout (1.5% charge)
-	// - "weekly" is weekly payout (1.5% charge) etc.
-	// const account = await stripe.accounts.update(user.stripe_account_id, {
-	// 	settings: {
-	// 		payouts: {
-	// 			schedule: {
-	// 				interval: "manual",
-	// 			},
-	// 		},
-	// 	},
-	// });
-	// console.log("UPDATE ACCOUNT => ", account);
+// Update stripe payment delay (2 days)
+const updateDelayDays = async (accountId) => {
+	return await stripe.accounts.update(accountId, {
+		settings: {
+			payouts: {
+				schedule: {
+					delay_days: process.env.STRIPE_PAYMENT_DELAY_DAYS,
+				},
+			},
+		},
+	});
+};
 
-	res.json({ ok: true });
+// Get stripe account status based on account id (for frontend to complete onboarding)
+export const getAccountStatus = async (req, res) => {
+	const user = await User.findById(req.auth._id).exec();
+
+	// get account status from stripe
+	const account = await stripe.accounts.retrieve(user.stripe_account_id);
+	console.log("USER ACCOUNT RETRIEVE", account);
+
+	// update delay days in stripe account
+	const updatedAccount = await updateDelayDays(account.id);
+	console.log("USER ACCOUNT DELAY DAYS UPDATED", updatedAccount);
+
+	// update stripe_seller in user db
+	const updatedUser = await User.findByIdAndUpdate(
+		user._id,
+		{
+			stripe_seller: updatedAccount,
+		},
+		{ new: true } // return updated user instead of old user
+	)
+		.select("-password") // remove password from user object
+		.exec(); // execute query
+
+	res.json(updatedUser);
 };

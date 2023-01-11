@@ -73,8 +73,9 @@ export const login = async (req, res) => {
 					lastName: user.lastName,
 					email: user.email,
 					role: user.role,
-					// stripe_account_id: user.stripe_account_id,
-					// stripe_seller: user.stripe_seller,
+					stripe_account_id: user.stripe_account_id,
+					stripe_seller: user.stripe_seller,
+					stripeSession: user.stripeSession,
 				},
 			});
 		});
