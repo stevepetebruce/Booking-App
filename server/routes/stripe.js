@@ -9,6 +9,7 @@ import {
 	registerConnectAccount,
 	getAccountStatus,
 	getAccountBalance,
+	payoutSetting,
 } from "../controllers/stripe.js";
 
 router.post("/connect-register", requireSignin, registerConnectAccount);
@@ -16,5 +17,7 @@ router.post("/connect-register", requireSignin, registerConnectAccount);
 router.post("/get-account-status", requireSignin, getAccountStatus);
 
 router.post("/get-account-balance", requireSignin, getAccountBalance);
+
+router.post("/payout-setting", requireSignin, payoutSetting);
 
 module.exports = router;

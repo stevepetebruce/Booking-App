@@ -35,3 +35,15 @@ export const getAccountBalance = async (token) => {
 		}
 	);
 };
+
+export const payoutSetting = async (token) => {
+	return await axios.post(
+		`${process.env.REACT_APP_API}/payout-setting`,
+		{},
+		{
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		}
+	);
+};
