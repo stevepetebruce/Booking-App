@@ -54,3 +54,12 @@ export const create = async (req, res) => {
 		res.status(400).send("Error. Try again.");
 	}
 };
+
+export const listAll = async (req, res) => {
+	let venues = await Venue.find({})
+		.limit(24)
+		.select("-image.data")
+		.populate("postedBy", " _id firstName lastName")
+		.exec();
+	res.json(venues);
+};

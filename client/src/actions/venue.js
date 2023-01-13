@@ -11,3 +11,7 @@ export const createVenue = async (venue, token) => {
 		}
 	);
 };
+
+export const venues = async () => {
+	return await axios.get(`${process.env.REACT_APP_API}/venues`);
+};

@@ -14,6 +14,7 @@ import Dashboard from "./pages/user/Dashboard";
 import DashboardSeller from "./pages/user/DashboardSeller";
 import NewVenue from "./pages/venues/NewVenue";
 import StripeCallback from "./pages/stripe/StripeCallback";
+import VenueDetail from "./pages/booking/Detail";
 
 function App() {
 	return (
@@ -24,6 +25,7 @@ function App() {
 				<Route path="/" element={<Home />} />
 				<Route path="login/*" element={<Login />} />
 				<Route path="register/*" element={<Register />} />
+				<Route path="/venue/:slug" element={<VenueDetail />} />
 				<Route element={<ProtectedRoutes />}>
 					<Route path="dashboard/" element={<Dashboard />} />
 					<Route
