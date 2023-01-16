@@ -9,9 +9,9 @@ import { useSelector } from "react-redux";
 function Home() {
 	// Redux - useSelector
 	const state = useSelector((state) => state);
+	console.log({ state });
 
 	const [venues, setVenues] = useState([]);
-	const [venueImage, setVenueImage] = useState([]);
 
 	useEffect(() => {
 		getVenues();
@@ -33,11 +33,12 @@ function Home() {
 				venues.map((venue) => (
 					<SmallCard
 						key={venue._id}
+						id={venue._id}
 						title={venue.title}
 						description={venue.content}
 						subDescription={venue.createdAt}
 						link={venue.slug}
-						image={venueImage}
+						image={venue.image}
 					/>
 				))}
 		</div>

@@ -63,3 +63,11 @@ export const listAll = async (req, res) => {
 		.exec();
 	res.json(venues);
 };
+
+export const image = async (req, res) => {
+	let venue = await Venue.findById(req.params.id).exec();
+	if (venue && venue.image && venue.image.data !== null) {
+		res.set("Content-Type", venue.image.contentType);
+		return res.send(venue.image.data);
+	}
+};
