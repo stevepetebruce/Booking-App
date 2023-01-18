@@ -59,7 +59,10 @@ const venueSchema = new Schema(
 // slugify the title
 venueSchema.pre("validate", function (next) {
 	if (this.title) {
-		this.slug = slugify(this.title);
+		this.slug = slugify(this.title, {
+			lower: true,
+			remove: /[*+~.()'"!:@]/g,
+		});
 	}
 	next();
 });
