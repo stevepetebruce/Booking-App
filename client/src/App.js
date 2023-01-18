@@ -12,7 +12,8 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Dashboard from "./pages/user/Dashboard";
 import DashboardSeller from "./pages/user/DashboardSeller";
-import NewVenue from "./pages/venues/NewVenue";
+import NewVenue from "./pages/admin/NewVenue";
+import EditVenue from "./pages/admin/EditVenue";
 import StripeCallback from "./pages/stripe/StripeCallback";
 import VenueDetail from "./pages/booking/Detail";
 
@@ -32,7 +33,11 @@ function App() {
 						path="dashboard/seller"
 						element={<DashboardSeller />}
 					/>
-					<Route path="venues/new" element={<NewVenue />} />
+					<Route path="dashboard/venue/new" element={<NewVenue />} />
+					<Route
+						path="dashboard/venue/edit/:id"
+						element={<EditVenue />}
+					/>
 					<Route
 						path="stripe/callback"
 						element={<StripeCallback />}

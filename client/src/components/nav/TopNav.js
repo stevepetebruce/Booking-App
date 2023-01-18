@@ -57,7 +57,10 @@ const TopNav = () => {
 					</div>
 				) : (
 					<div className="col-md-3 text-end">
-						<a onClick={handleLogout} className="btn btn-primary">
+						<a
+							href="#!"
+							onClick={handleLogout}
+							className="btn btn-primary">
 							Logout
 						</a>
 					</div>

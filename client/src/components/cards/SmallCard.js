@@ -7,7 +7,7 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 
 // ant icons
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { EditOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 
 const SmallCard = ({
 	title,
@@ -18,6 +18,9 @@ const SmallCard = ({
 	id,
 	admin = false,
 	showViewMore = true,
+	enabled = true,
+	handleEnabled = (f) => f,
+	loading = false,
 }) => {
 	return (
 		<div className="card mb-3">
@@ -42,7 +45,7 @@ const SmallCard = ({
 				<div className="col-md-8">
 					<div className="card-body">
 						<h5 className="card-title">{title}</h5>
-						<p className="card-text">{`${description.substring(
+						<p className="card-text">{`${description?.substring(
 							1,
 							200
 						)}...`}</p>
@@ -73,15 +76,25 @@ const SmallCard = ({
 							)}
 
 							{admin && (
-								<div className="h4">
-									<Link
-										to={`/venue/edit/${link}`}
-										className="mx-3">
+								<div className="h5">
+									<Link to={`/dashboard/venue/edit/${id}`}>
 										<EditOutlined title="Edit" />
 									</Link>
-									<Link to={`/venue/delete/${link}`}>
-										<DeleteOutlined title="Delete" />
-									</Link>
+									<a
+										href="#!"
+										onClick={() => handleEnabled(id)}
+										className="mx-2 pe-auto">
+										<EyeInvisibleOutlined
+											title={`${
+												enabled
+													? "Hide from public"
+													: "Make public"
+											}`}
+											className={`${
+												enabled ? "" : "text-danger"
+											}`}
+										/>
+									</a>
 								</div>
 							)}
 						</div>

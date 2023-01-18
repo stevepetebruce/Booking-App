@@ -48,6 +48,10 @@ const venueSchema = new Schema(
 		people: {
 			type: Number,
 		},
+		enabled: {
+			type: Boolean,
+			default: true,
+		},
 	},
 	{ timestamps: true }
 );

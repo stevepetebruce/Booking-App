@@ -3,14 +3,42 @@ import formidable from "express-formidable";
 const router = express.Router();
 
 // Middleware
-import { requireSignin } from "../middleware/index.js";
+import { requireSignin, venueCreator } from "../middleware/index.js";
 
 // Controllers
-import { create, listAll, image } from "../controllers/venue.js";
+import {
+	create,
+	edit,
+	listAll,
+	single,
+	singleAdmin,
+	image,
+	AdminListAll,
+	toggleEnabled,
+} from "../controllers/venue.js";
 
 router.post("/create-venue", requireSignin, formidable(), create);
 
 router.get("/venues", listAll);
 router.get("/venue/image/:id", image);
+router.get("/venue/:slug", single);
+
+router.get("/admin/venue/:id", singleAdmin);
+router.get("/admin/venues", requireSignin, AdminListAll);
+
+router.put(
+	"/admin/edit-venue/:id",
+	requireSignin,
+	venueCreator,
+	formidable(),
+	edit
+);
+
+router.put(
+	"/admin/venue/enabled/:id",
+	requireSignin,
+	venueCreator,
+	toggleEnabled
+);
 
 module.exports = router;

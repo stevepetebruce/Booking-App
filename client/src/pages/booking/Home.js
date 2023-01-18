@@ -39,6 +39,7 @@ function Home() {
 						subDescription={venue.createdAt}
 						link={venue.slug}
 						image={venue.image}
+						enabled={venue.enabled}
 					/>
 				))}
 		</div>
