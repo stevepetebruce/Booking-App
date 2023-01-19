@@ -8,11 +8,20 @@ import { useSelector } from "react-redux";
 // moment
 import moment from "moment";
 
+// actions
+import { getSessionId } from "../../actions/stripe";
+
 // params
 import { useParams, useNavigate } from "react-router-dom";
 
+// stripe checkout
+import { loadStripe } from "@stripe/stripe-js";
+
 function Detail() {
 	const navigate = useNavigate();
+
+	// stripe
+	const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_KEY);
 
 	// redux
 	const { auth } = useSelector((state) => ({ ...state }));
@@ -21,6 +30,7 @@ function Detail() {
 	const { slug } = useParams();
 	const [data, setData] = useState({});
 	const [image, setImage] = useState({});
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		getVenue();
@@ -40,8 +50,9 @@ function Detail() {
 		}
 	};
 
-	const handleClick = (e) => {
+	const handleClick = async (e) => {
 		e.preventDefault();
+		setLoading(true);
 		// check if user is logged in
 		if (!auth.token) {
 			console.log("Please login to book");
@@ -50,8 +61,20 @@ function Detail() {
 		}
 		if (auth?.token) {
 			// send request to backend
-			console.log({ auth });
+			console.log("SENDING REQUEST TO BACKEND");
+			// get session id from backend and redirect to stripe checkout
+			let res = await getSessionId(auth.token, data._id);
+			// console.log("SESSION RESPONSE", res.data);
+
+			// redirect to stripe checkout
+			const stripe = await stripePromise;
+			stripe
+				.redirectToCheckout({
+					sessionId: res.data.sessionId,
+				})
+				.then((result) => console.log(result));
 		}
+		setLoading(false);
 	};
 
 	return (
@@ -93,8 +116,21 @@ function Detail() {
 
 					<button
 						onClick={handleClick}
-						className="btn btn-primary btn-block mt-5">
-						{auth?.token ? "Book Now" : "Login to Book"}
+						className="btn btn-primary btn-block mt-5"
+						diasbled={loading}>
+						{loading ? (
+							<div
+								className="spinner-border spinner-border-sm text-light"
+								role="status">
+								<span className="visually-hidden">
+									Loading...
+								</span>
+							</div>
+						) : auth?.token ? (
+							"Book Now"
+						) : (
+							"Login to Book"
+						)}
 					</button>
 				</div>
 				<div className="col-md-8">
@@ -102,8 +138,21 @@ function Detail() {
 					<p>
 						<button
 							onClick={handleClick}
-							className="btn btn-primary btn-block mt-3">
-							{auth?.token ? "Book Now" : "Login to Book"}
+							className="btn btn-primary btn-block mt-5"
+							diasbled={loading}>
+							{loading ? (
+								<div
+									className="spinner-border spinner-border-sm text-light"
+									role="status">
+									<span className="visually-hidden">
+										Loading...
+									</span>
+								</div>
+							) : auth?.token ? (
+								"Book Now"
+							) : (
+								"Login to Book"
+							)}
 						</button>
 					</p>
 				</div>

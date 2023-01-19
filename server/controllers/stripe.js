@@ -1,4 +1,6 @@
 import User from "../models/user";
+import Venue from "../models/venue";
+
 import Stripe from "stripe";
 
 const queryString = require("querystring");
@@ -110,4 +112,51 @@ export const payoutSetting = async (req, res) => {
 	} catch (err) {
 		console.log(err);
 	}
+};
+
+// Stipe create session (for payment when user clicks buy now) (Like a shopping cart)
+export const createCheckoutSession = async (req, res) => {
+	const seller = await User.findById(req.auth._id).exec();
+	const venue = await Venue.findById(req.body.venueId)
+		.populate("postedBy")
+		.exec();
+
+	const fee = (venue.price * 10) / 100; // 10% fee for platform Owner (me) (Stripe takes 2.9% + 30 cents) (I take 7.1%)
+
+	// console.log("USER => ", user._id, "BODY => ", req.body.venueId);
+
+	// create checkout session
+	const session = await stripe.checkout.sessions.create({
+		payment_method_types: ["card"],
+		line_items: [
+			{
+				price_data: {
+					currency: "gbp",
+					unit_amount: venue.price * 100, // convert to pence
+					product_data: {
+						name: venue.title,
+						description: venue.content,
+					},
+				},
+				quantity: 1,
+			},
+		],
+		mode: "payment",
+		payment_intent_data: {
+			application_fee_amount: Math.round(fee * 100), // convert sellers fee to pence
+			transfer_data: {
+				destination: seller.stripe_account_id,
+			},
+		},
+		success_url: `${process.env.STRIPE_SUCCESS_URL}/${venue._id}`,
+		cancel_url: process.env.STRIPE_CANCEL_URL,
+	});
+
+	// console.log("SESSION => ", session);
+
+	// update user with new stripe session
+	await User.findByIdAndUpdate(seller._id, { stripeSession: session }).exec();
+
+	// send session id as response to frontend
+	res.json({ sessionId: session.id });
 };

@@ -77,7 +77,7 @@ const ConnectNav = () => {
 								balance.pending.map((balancePending, i) => (
 									<span className="lead" key={i}>
 										{formatCurrency(
-											balancePending.amount,
+											balancePending.amount / 100,
 											balancePending.currency
 										)}
 									</span>
