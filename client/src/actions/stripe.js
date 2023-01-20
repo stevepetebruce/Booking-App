@@ -61,3 +61,16 @@ export const getSessionId = async (token, venueId) => {
 		}
 	);
 };
+
+// Success Page for Stripe Checkout Request
+export const stripeSuccessRequest = async (token, venueId) => {
+	return await axios.post(
+		`${process.env.REACT_APP_API}/stripe-success`,
+		{ venueId },
+		{
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		}
+	);
+};

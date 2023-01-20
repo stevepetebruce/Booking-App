@@ -16,6 +16,8 @@ import NewVenue from "./pages/admin/NewVenue";
 import EditVenue from "./pages/admin/EditVenue";
 import StripeCallback from "./pages/stripe/StripeCallback";
 import VenueDetail from "./pages/booking/Detail";
+import StripeCancel from "./pages/stripe/StripeCancel";
+import StripeSuccess from "./pages/stripe/StripeSuccess";
 
 function App() {
 	return (
@@ -41,6 +43,11 @@ function App() {
 					<Route
 						path="stripe/callback"
 						element={<StripeCallback />}
+					/>
+					<Route path="stripe/cancel" element={<StripeCancel />} />
+					<Route
+						path="stripe/success/:id"
+						element={<StripeSuccess />}
 					/>
 				</Route>
 			</Routes>

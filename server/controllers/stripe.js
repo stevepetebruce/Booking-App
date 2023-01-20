@@ -1,5 +1,6 @@
 import User from "../models/user";
 import Venue from "../models/venue";
+import Order from "../models/order";
 
 import Stripe from "stripe";
 
@@ -116,10 +117,10 @@ export const payoutSetting = async (req, res) => {
 
 // Stipe create session (for payment when user clicks buy now) (Like a shopping cart)
 export const createCheckoutSession = async (req, res) => {
-	const seller = await User.findById(req.auth._id).exec();
 	const venue = await Venue.findById(req.body.venueId)
 		.populate("postedBy")
 		.exec();
+	const seller = await User.findById(venue.postedBy._id).exec();
 
 	const fee = (venue.price * 10) / 100; // 10% fee for platform Owner (me) (Stripe takes 2.9% + 30 cents) (I take 7.1%)
 
@@ -145,7 +146,7 @@ export const createCheckoutSession = async (req, res) => {
 		payment_intent_data: {
 			application_fee_amount: Math.round(fee * 100), // convert sellers fee to pence
 			transfer_data: {
-				destination: seller.stripe_account_id,
+				destination: seller.stripe_account_id, // seller stripe account id
 			},
 		},
 		success_url: `${process.env.STRIPE_SUCCESS_URL}/${venue._id}`,
@@ -154,9 +155,63 @@ export const createCheckoutSession = async (req, res) => {
 
 	// console.log("SESSION => ", session);
 
-	// update user with new stripe session
-	await User.findByIdAndUpdate(seller._id, { stripeSession: session }).exec();
+	// update buyer with new stripe session (details of order)
+	await User.findByIdAndUpdate(req.auth._id, {
+		stripeSession: session,
+	}).exec();
 
 	// send session id as response to frontend
 	res.json({ sessionId: session.id });
+};
+
+// Stripe completed order
+export const stripeSuccess = async (req, res) => {
+	try {
+		const venue = await Venue.findById(req.body.venueId)
+			.populate("postedBy")
+			.exec();
+
+		// logged in user (buyer)
+		const user = await User.findById(req.auth._id).exec();
+
+		// check if user has stripe session
+		if (!user.stripeSession) {
+			return res.json({ success: false });
+		}
+
+		const session = await stripe.checkout.sessions.retrieve(
+			user.stripeSession.id
+		);
+
+		// if session payment status is paid create order
+		if (session.payment_status === "paid") {
+			// check if order with same venue id and session id already exists
+			const orderExist = await Order.findOne({
+				"venue._id": venue._id,
+				session: session.id,
+			}).exec();
+
+			if (orderExist) {
+				res.json({ success: true });
+			} else {
+				// create new order for venue and success true
+				const newOrder = await new Order({
+					venue: venue._id,
+					session,
+					orderedBy: user._id,
+					soldBy: venue.postedBy._id,
+				}).save();
+
+				// remove session from user db (clear buyers cart)
+				let userCart = await User.findOneAndUpdate(
+					{ _id: user._id },
+					{ $set: { stripeSession: {} } }
+				).exec();
+
+				res.json({ success: true });
+			}
+		}
+	} catch (err) {
+		console.log(err);
+	}
 };

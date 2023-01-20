@@ -11,6 +11,7 @@ import {
 	getAccountBalance,
 	payoutSetting,
 	createCheckoutSession,
+	stripeSuccess,
 } from "../controllers/stripe.js";
 
 router.post("/connect-register", requireSignin, registerConnectAccount);
@@ -22,5 +23,8 @@ router.post("/get-account-balance", requireSignin, getAccountBalance);
 router.post("/payout-setting", requireSignin, payoutSetting);
 
 router.post("/create-checkout-session", requireSignin, createCheckoutSession);
+
+// order
+router.post("/stripe-success", requireSignin, stripeSuccess);
 
 module.exports = router;
