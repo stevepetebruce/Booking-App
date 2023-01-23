@@ -3,9 +3,6 @@ import React, { useEffect, useState } from "react";
 // params
 import { useParams, Link } from "react-router-dom";
 
-// axios
-import axios from "axios";
-
 import { adminVenue } from "../../actions/venue";
 
 const StripeCancel = () => {

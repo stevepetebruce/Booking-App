@@ -45,6 +45,14 @@ export const adminVenues = async (token) => {
 	});
 };
 
+export const userBookings = async (token) => {
+	return await axios.get(`${process.env.REACT_APP_API}/admin/bookings`, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+};
+
 // Toggle venue enabled
 export const enableVenue = async (venueId, token) => {
 	console.log("venueId", venueId, "token", token);

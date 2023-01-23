@@ -1,5 +1,6 @@
 import User from "../models/user";
 import Venue from "../models/venue";
+import Order from "../models/order";
 
 import fs from "fs";
 
@@ -133,6 +134,18 @@ export const singleAdmin = async (req, res) => {
 		.populate("postedBy", "_id firstName lastName")
 		.exec();
 	res.json(venue);
+};
+
+export const userBookings = async (req, res) => {
+	const allUserBookings = await Order.find({
+		orderedBy: req.auth._id,
+	})
+		.select("session")
+		.populate("venue", "-image.data")
+		.populate("orderedBy", "_id firstName lastName")
+		.exec();
+
+	res.json(allUserBookings);
 };
 
 export const AdminListAll = async (req, res) => {

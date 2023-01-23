@@ -15,6 +15,7 @@ import {
 	image,
 	AdminListAll,
 	toggleEnabled,
+	userBookings,
 } from "../controllers/venue.js";
 
 router.post("/create-venue", requireSignin, formidable(), create);
@@ -25,6 +26,7 @@ router.get("/venue/:slug", single);
 
 router.get("/admin/venue/:id", singleAdmin);
 router.get("/admin/venues", requireSignin, AdminListAll);
+router.get("/admin/bookings", requireSignin, userBookings);
 
 router.put(
 	"/admin/edit-venue/:id",
