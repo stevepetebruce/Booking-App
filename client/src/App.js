@@ -44,7 +44,10 @@ function App() {
 						path="stripe/callback"
 						element={<StripeCallback />}
 					/>
-					<Route path="stripe/cancel" element={<StripeCancel />} />
+					<Route
+						path="stripe/cancel/:id"
+						element={<StripeCancel />}
+					/>
 					<Route
 						path="stripe/success/:id"
 						element={<StripeSuccess />}

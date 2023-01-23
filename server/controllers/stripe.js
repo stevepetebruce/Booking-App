@@ -150,7 +150,7 @@ export const createCheckoutSession = async (req, res) => {
 			},
 		},
 		success_url: `${process.env.STRIPE_SUCCESS_URL}/${venue._id}`,
-		cancel_url: process.env.STRIPE_CANCEL_URL,
+		cancel_url: `${process.env.STRIPE_CANCEL_URL}/${venue._id}`,
 	});
 
 	// console.log("SESSION => ", session);

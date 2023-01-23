@@ -117,7 +117,7 @@ function Detail() {
 					<button
 						onClick={handleClick}
 						className="btn btn-primary btn-block mt-5"
-						diasbled={loading}>
+						disabled={loading}>
 						{loading ? (
 							<div
 								className="spinner-border spinner-border-sm text-light"
@@ -139,7 +139,7 @@ function Detail() {
 						<button
 							onClick={handleClick}
 							className="btn btn-primary btn-block mt-5"
-							diasbled={loading}>
+							disabled={loading}>
 							{loading ? (
 								<div
 									className="spinner-border spinner-border-sm text-light"
