@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { venue } from "../../actions/venue";
+import { venue, isBooked } from "../../actions/venue";
 
 // redux
 import { useSelector } from "react-redux";
@@ -30,11 +30,19 @@ function Detail() {
 	const { slug } = useParams();
 	const [data, setData] = useState({});
 	const [image, setImage] = useState({});
+	const [alreadyBooked, setAlreadyBooked] = useState(false);
 	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		getVenue();
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+	// check if venue is booked
+	useEffect(() => {
+		if (auth.token && data._id) {
+			isAlreadyBooked();
+		}
+	}, [data]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const getVenue = async () => {
 		try {
@@ -50,8 +58,25 @@ function Detail() {
 		}
 	};
 
+	const isAlreadyBooked = async () => {
+		try {
+			const res = await isBooked(data._id, auth.token);
+			console.log("BOOKED CHECK", res.data);
+			setAlreadyBooked(res.data);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	const handleClick = async (e) => {
 		e.preventDefault();
+
+		// check if user is not logged in
+		if (!auth?.token) {
+			navigate("/login");
+			return;
+		}
+
 		setLoading(true);
 		// check if user is logged in
 		if (!auth.token) {
@@ -114,28 +139,13 @@ function Detail() {
 							`${data.postedBy.firstName} ${data.postedBy.lastName}`}
 					</h5>
 
-					<button
-						onClick={handleClick}
-						className="btn btn-primary btn-block mt-5"
-						disabled={loading}>
-						{loading ? (
-							<div
-								className="spinner-border spinner-border-sm text-light"
-								role="status">
-								<span className="visually-hidden">
-									Loading...
-								</span>
-							</div>
-						) : auth?.token ? (
-							"Book Now"
-						) : (
-							"Login to Book"
-						)}
-					</button>
-				</div>
-				<div className="col-md-8">
-					<p>{data.content}</p>
-					<p>
+					{alreadyBooked ? (
+						<button
+							className="btn btn-primary btn-block mt-5"
+							disabled={alreadyBooked}>
+							Already Booked
+						</button>
+					) : (
 						<button
 							onClick={handleClick}
 							className="btn btn-primary btn-block mt-5"
@@ -154,6 +164,37 @@ function Detail() {
 								"Login to Book"
 							)}
 						</button>
+					)}
+				</div>
+				<div className="col-md-8">
+					<p>{data.content}</p>
+					<p>
+						{alreadyBooked ? (
+							<button
+								className="btn btn-primary btn-block mt-5"
+								disabled={alreadyBooked}>
+								Already Booked
+							</button>
+						) : (
+							<button
+								onClick={handleClick}
+								className="btn btn-primary btn-block mt-5"
+								disabled={loading}>
+								{loading ? (
+									<div
+										className="spinner-border spinner-border-sm text-light"
+										role="status">
+										<span className="visually-hidden">
+											Loading...
+										</span>
+									</div>
+								) : auth?.token ? (
+									"Book Now"
+								) : (
+									"Login to Book"
+								)}
+							</button>
+						)}
 					</p>
 				</div>
 			</div>

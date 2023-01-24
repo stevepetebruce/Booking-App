@@ -11,6 +11,7 @@ import {
 	edit,
 	listAll,
 	single,
+	isBooked,
 	singleAdmin,
 	image,
 	AdminListAll,
@@ -23,6 +24,7 @@ router.post("/create-venue", requireSignin, formidable(), create);
 router.get("/venues", listAll);
 router.get("/venue/image/:id", image);
 router.get("/venue/:slug", single);
+router.get("/is-booked/:venueId", requireSignin, isBooked);
 
 router.get("/admin/venue/:id", singleAdmin);
 router.get("/admin/venues", requireSignin, AdminListAll);

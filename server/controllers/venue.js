@@ -100,11 +100,11 @@ export const edit = async (req, res) => {
 };
 
 export const listAll = async (req, res) => {
-	let venues = await Venue.find({})
+	let venues = await Venue.find({
+		enabled: true,
+		to: { $gte: new Date() },
+	})
 		.limit(24)
-		// enabled field is === true
-		.where("enabled")
-		.equals("true")
 		.select("-image.data")
 		.populate("postedBy", " _id firstName lastName")
 		.exec();
@@ -120,12 +120,30 @@ export const image = async (req, res) => {
 };
 
 export const single = async (req, res) => {
-	console.log(req.params.slug);
+	// console.log(req.params.slug);
 	let venue = await Venue.findOne({ slug: req.params.slug })
 		.select("-image.data")
 		.populate("postedBy", "_id firstName lastName")
 		.exec();
 	res.json(venue);
+};
+
+export const isBooked = async (req, res) => {
+	const venueId = req.params.venueId;
+	const user = await User.findById(req.auth._id).exec();
+	console.log("CHECK IF BOOKED", venueId, user._id);
+	// check if user has already booked this venue
+	// find order based on venueId and user
+	const check = await Order.findOne({
+		venue: venueId,
+		orderedBy: user._id,
+	}).exec();
+
+	// console.log("BOOKING EXIST", check);
+	if (check) {
+		return res.json(true);
+	}
+	res.json(false);
 };
 
 export const singleAdmin = async (req, res) => {

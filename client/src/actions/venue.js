@@ -33,6 +33,19 @@ export const venues = async () => {
 	return await axios.get(`${process.env.REACT_APP_API}/venues`);
 };
 
+// Check if the venue is already booked
+export const isBooked = async (venueId, token) => {
+	console.log({ token }, { venueId });
+	return await axios.get(
+		`${process.env.REACT_APP_API}/is-booked/${venueId}`,
+		{
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		}
+	);
+};
+
 export const adminVenue = async (id) => {
 	return await axios.get(`${process.env.REACT_APP_API}/admin/venue/${id}`);
 };
