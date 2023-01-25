@@ -8,6 +8,7 @@ import TopNav from "./components/nav/TopNav";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
 
 import Home from "./pages/booking/Home";
+import SearchResult from "./pages/booking/SearchResult";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Dashboard from "./pages/user/Dashboard";
@@ -26,6 +27,7 @@ function App() {
 			<ToastContainer position="bottom-right" />
 			<Routes>
 				<Route path="/" element={<Home />} />
+				<Route path="/search" element={<SearchResult />} />
 				<Route path="login/*" element={<Login />} />
 				<Route path="register/*" element={<Register />} />
 				<Route path="/venue/:slug" element={<VenueDetail />} />

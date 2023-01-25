@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { venues as allVenues } from "../../actions/venue";
+import Search from "../../components/forms/Search";
 import SmallCard from "../../components/cards/SmallCard";
 
 // Redux - useSelector
@@ -28,6 +29,8 @@ function Home() {
 
 	return (
 		<div className="container">
+			<Search />
+
 			<h1 className="text-center">Venues</h1>
 			{venues &&
 				venues.map((venue) => (

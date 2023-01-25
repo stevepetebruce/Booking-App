@@ -33,6 +33,14 @@ export const venues = async () => {
 	return await axios.get(`${process.env.REACT_APP_API}/venues`);
 };
 
+export const venuesSearch = async (dates, people, price) => {
+	return await axios.post(`${process.env.REACT_APP_API}/venues/search`, {
+		dates,
+		people,
+		price,
+	});
+};
+
 // Check if the venue is already booked
 export const isBooked = async (venueId, token) => {
 	console.log({ token }, { venueId });
