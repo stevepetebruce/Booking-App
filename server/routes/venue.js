@@ -10,6 +10,7 @@ import {
 	create,
 	edit,
 	listAll,
+	searchVenues,
 	single,
 	isBooked,
 	singleAdmin,
@@ -22,6 +23,7 @@ import {
 router.post("/create-venue", requireSignin, formidable(), create);
 
 router.get("/venues", listAll);
+router.post("/venues/search", searchVenues);
 router.get("/venue/image/:id", image);
 router.get("/venue/:slug", single);
 router.get("/is-booked/:venueId", requireSignin, isBooked);

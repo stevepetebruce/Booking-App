@@ -6,8 +6,11 @@ import { Link } from "react-router-dom";
 // query string
 import queryString from "query-string";
 
-// Search Form
+import SmallCard from "../../components/cards/SmallCard";
 import Search from "../../components/forms/Search";
+
+//moment
+import moment from "moment";
 
 // action
 import { venuesSearch } from "../../actions/venue";
@@ -17,9 +20,12 @@ import { useLocation } from "react-router-dom";
 
 const SearchResult = () => {
 	// state
-	const [searchDate, setSearchDate] = useState("");
-	const [searchPeople, setSearchPeople] = useState([]);
-	const [searchPrice, setSearchPrice] = useState([]);
+	const [searchDate, setSearchDate] = useState([
+		moment().format("YYYY-DD-MM"),
+		moment().format("YYYY-DD-MM"),
+	]);
+	const [searchPeople, setSearchPeople] = useState("1");
+	const [searchPrice, setSearchPrice] = useState([0, 0]);
 
 	const [searchResults, setSearchResults] = useState([]);
 
@@ -41,12 +47,13 @@ const SearchResult = () => {
 	}, [searchDate, searchPeople, searchPrice]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const getSearchResults = async () => {
+		const queries = {
+			dates: searchDate,
+			people: searchPeople,
+			price: searchPrice,
+		};
 		try {
-			const res = await venuesSearch({
-				dates: searchDate,
-				people: searchPeople,
-				price: searchPrice,
-			});
+			const res = await venuesSearch(queries);
 			setSearchResults(res.data);
 		} catch (error) {
 			console.log(error);
@@ -57,9 +64,26 @@ const SearchResult = () => {
 
 	return (
 		<div className="container">
-			SearchResult
-			<br></br>
-			{JSON.stringify(searchResults, null, 4)}
+			<Search />
+			<h1 className="text-center">
+				{searchResults.length > 0
+					? `${searchResults.length} Venue${
+							searchResults.length === 1 ? "" : "s"
+					  } Found`
+					: "0 Venues Found"}
+			</h1>
+			{searchResults.map((venue) => (
+				<SmallCard
+					key={venue._id}
+					id={venue._id}
+					title={venue.title}
+					description={venue.content}
+					subDescription={venue.createdAt}
+					link={venue.slug}
+					image={venue.image}
+					enabled={venue.enabled}
+				/>
+			))}
 		</div>
 	);
 };

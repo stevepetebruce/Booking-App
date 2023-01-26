@@ -111,6 +111,24 @@ export const listAll = async (req, res) => {
 	res.json(venues);
 };
 
+export const searchVenues = async (req, res) => {
+	const { dates, people, price } = req.body.queries;
+
+	let venues = await Venue.find({
+		enabled: true,
+		from: { $lte: new Date(dates[0]) },
+		to: { $gte: new Date(dates[1]) },
+		people: { $gte: people },
+		price: { $gte: Number(price[0]), $lte: Number(price[1]) },
+	})
+		.limit(24)
+		.select("-image.data")
+		.populate("postedBy", " _id firstName lastName")
+		.exec();
+	console.log("SEARCH VENUES", venues);
+	res.json(venues);
+};
+
 export const image = async (req, res) => {
 	let venue = await Venue.findById(req.params.id).exec();
 	if (venue && venue.image && venue.image.data !== null) {
