@@ -7,7 +7,7 @@ const BookingCard = ({ venue, session, orderedBy }) => {
 	const [showModal, setShowModal] = useState(false);
 
 	return (
-		<div className="card px-0 mb-3">
+		<div className="card px-0 mb-3" data-testid="booking-card">
 			<div className="row g-0">
 				<div className="col-md-4">
 					{/* Check if image is available else add placeholder image */}
