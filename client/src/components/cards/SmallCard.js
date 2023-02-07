@@ -23,7 +23,7 @@ const SmallCard = ({
 	loading = false,
 }) => {
 	return (
-		<div className="card mb-3">
+		<div className="card mb-3" data-testid="small-card">
 			<div className="row g-0">
 				<div className="col-md-4">
 					{/* Check if image is available else add placeholder image */}
@@ -45,7 +45,9 @@ const SmallCard = ({
 				<div className="col-md-8">
 					<div className="card-body">
 						<h5 className="card-title">{title}</h5>
-						<p className="card-text">{`${description?.substring(
+						<p
+							className="card-text"
+							data-testid="venue-description">{`${description?.substring(
 							1,
 							200
 						)}...`}</p>
