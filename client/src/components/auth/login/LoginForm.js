@@ -1,14 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 
 const LoginForm = ({ handleLogin, formRefs: { emailRef, passwordRef } }) => {
 	// Disable submit button if email or password is empty
-	const [isDisabled, setIsDisabled] = React.useState({
+	const [isDisabled, setIsDisabled] = useState({
 		email: true,
 		password: true,
 	});
 
 	return (
-		<form onSubmit={handleLogin}>
+		<form onSubmit={handleLogin} data-testid="login-form">
 			<div className="form-floating mb-3">
 				<input
 					type="email"
@@ -29,7 +29,7 @@ const LoginForm = ({ handleLogin, formRefs: { emailRef, passwordRef } }) => {
 				<input
 					type="password"
 					className="form-control"
-					id="floatingPassword"
+					id="floatingInputPassword"
 					placeholder="Password"
 					ref={passwordRef}
 					onChange={() =>
@@ -39,7 +39,7 @@ const LoginForm = ({ handleLogin, formRefs: { emailRef, passwordRef } }) => {
 						})
 					}
 				/>
-				<label htmlFor="floatingPassword">Password</label>
+				<label htmlFor="floatingInputPassword">Password</label>
 			</div>
 			<button
 				disabled={isDisabled.email || isDisabled.password}
