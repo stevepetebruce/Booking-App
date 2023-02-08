@@ -28,7 +28,7 @@ function Home() {
 	};
 
 	return (
-		<div className="container">
+		<div className="container" data-testid="home">
 			<Search />
 
 			<h1 className="text-center">Venues</h1>
