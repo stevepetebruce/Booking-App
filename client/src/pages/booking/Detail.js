@@ -103,7 +103,7 @@ function Detail() {
 	};
 
 	return (
-		<div className="container">
+		<div className="container" data-testid="detail-container">
 			<h1>{data.title}</h1>
 			{/* two columns */}
 			<div className="row">
