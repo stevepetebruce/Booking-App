@@ -36,9 +36,13 @@ const SearchResult = () => {
 	useEffect(() => {
 		const { date, people, price } = queryString.parse(location.search);
 
-		setSearchDate(date.split(","));
+		if (date !== undefined) {
+			setSearchDate(date.split(","));
+		}
 		setSearchPeople(people);
-		setSearchPrice(price.split(","));
+		if (price !== undefined) {
+			setSearchPrice(price.split(","));
+		}
 	}, [location]);
 
 	// get Search results
@@ -63,7 +67,7 @@ const SearchResult = () => {
 	console.log(searchDate, searchPeople, searchPrice);
 
 	return (
-		<div className="container">
+		<div className="container" data-testid="search-results">
 			<Search />
 			<h1 className="text-center">
 				{searchResults.length > 0
